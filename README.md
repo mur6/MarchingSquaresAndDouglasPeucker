@@ -1,4 +1,9 @@
 # Marching Squares and Douglas Peucker algorithm in TypeScript
+## Start development
+```
+npm i
+npx parcel index.html
+```
 
 ## 参考サイト
 ### Marching Squares algorithm
