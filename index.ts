@@ -1,9 +1,9 @@
 import { getBlobOutlinePoints as getBlobOutlinePointsOpt } from './marching-sq'
 import { douglasPeucker, poly_simplify, type Vector } from './sim'
 
-function getRandomItemFromArray(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
+// function getRandomItemFromArray(array) {
+//     return array[Math.floor(Math.random() * array.length)];
+// }
 
 //let canvas
 //, context;
@@ -40,15 +40,16 @@ export function init() {
     var numCharacters = 10;
     var radianIncrement = (Math.PI * 2) / numCharacters;
 
-    var grifa = getRandomItemFromArray;
+    //var grifa = getRandomItemFromArray;
     for (i = 0; i < numCharacters; i++) {
-        context.font = grifa(weights) + " " + grifa(styles) + " " + 80 + "px " + grifa(fonts);
-        context.save();
+        //context.font = grifa(weights) + " " + grifa(styles) + " " + 80 + "px " + grifa(fonts);
+        context.font = "normal italic 80px fantasy"
+        //context.save();
         context.translate(150, 150);
         context.rotate(i * radianIncrement);
-        character = grifa(characters);
-        context.fillText(character, 0, 0);
-        context.restore();
+        //character = grifa(characters);
+        context.fillText("Q", 0, 0);
+        //context.restore();
     }
 
     runMarchingSquaresOpt(canvas)
@@ -84,8 +85,8 @@ function runMarchingSquaresOpt(canvas) {
     const outlinePoints = getBlobOutlinePointsOpt(data, width, height);  // returns [x1,y1,x2,y2,x3,y3... etc.]
     let result = document.getElementById("result")!;
     result.innerHTML = "March (new opt) took : " + (new Date().getTime() - start.getTime());
-    //renderOutlineSimple(context, outlinePoints);
-    renderOutlineOrig(context, outlinePoints)
+    renderOutlineSimple(context, outlinePoints);
+    //renderOutlineOrig(context, outlinePoints)
 }
 
 // function runMarchingSquaresBenchmarks(ntimes = 20) {

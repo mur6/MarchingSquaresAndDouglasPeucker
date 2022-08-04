@@ -1,4 +1,4 @@
-export function getBlobOutlinePoints(source_array: Uint8Array, width, height = 0) {
+export function getBlobOutlinePoints(source_array: Uint8Array, width, height) {
     // Note: object should not be on the border of the array, since there is
     //       no padding of 1 pixel to handle points which touch edges
 
@@ -15,7 +15,7 @@ export function getBlobOutlinePoints(source_array: Uint8Array, width, height = 0
     // } else if (0 == height){
     //     height = (source_array.length / width)|0;
     // }
-    height = (source_array.length / width)
+    //height = (source_array.length / width)
 
     // find the starting point
     const startingPoint = getFirstNonTransparentPixelTopDown(source_array, width, height);
@@ -52,7 +52,7 @@ function walkPerimeter(source_array, width, height, start_w: number, start_h: nu
     let up = 1 | 0, left = 2 | 0, down = 3 | 0, right = 4 | 0;
     const step_func = step;
 
-    let idx = 0 | 0  // Note: initialize it with an integer, so the JS interpreter optimizes for this type.
+    let idx: number = 0// = 0 | 0  // Note: initialize it with an integer, so the JS interpreter optimizes for this type.
 
     // our current x and y positions, initialized
     // to the init values passed in
@@ -62,6 +62,7 @@ function walkPerimeter(source_array, width, height, start_w: number, start_h: nu
     // the main while loop, continues stepping until
     // we return to our initial points
     let next_step;
+    console.log("walkPerimeter: start")
     do {
         // evaluate our state, and set up our next direction
         idx = (h - 1) * width + (w - 1);
@@ -83,6 +84,7 @@ function walkPerimeter(source_array, width, height, start_w: number, start_h: nu
         }
         //console.log(w, start_w, "  : ", h, start_h)
     } while (w != start_w || h != start_h);
+    console.log("walkPerimeter: end")
 
     point_list.push(w, h);
 
