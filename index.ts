@@ -73,18 +73,19 @@ export function init() {
 function runMarchingSquaresOpt(canvas) {
     let start = new Date();
     let context = canvas.getContext('2d')!
-    const width = canvas.width,
-        height = canvas.height,
-        data4 = context.getImageData(0, 0, width, height).data,  // Uint8ClampedArray
-        len = width * height,
-        data = new Uint8Array(len);
+    const width = canvas.width
+    const height = canvas.height
+    const data4: Uint8ClampedArray = context.getImageData(0, 0, width, height).data //
+    const len = width * height
+    const data = new Uint8Array(len)
     for (let i = 0; i < len; ++i) {
         data[i] = data4[i << 2];
     }
     const outlinePoints = getBlobOutlinePointsOpt(data, width, height);  // returns [x1,y1,x2,y2,x3,y3... etc.]
     let result = document.getElementById("result")!;
     result.innerHTML = "March (new opt) took : " + (new Date().getTime() - start.getTime());
-    renderOutline(context, outlinePoints);
+    //renderOutlineSimple(context, outlinePoints);
+    renderOutlineOrig(context, outlinePoints)
 }
 
 // function runMarchingSquaresBenchmarks(ntimes = 20) {
@@ -146,22 +147,42 @@ function* toNumberList(outlinePoints) {
     }
 }
 
-function renderOutline(context, outlinePoints) {
+function renderOutlineOrig(context, outlinePoints) {
     //THIS IS IT, MARCHING SQUARES SAMPLE :
     context.fillStyle = "#FF0000"// : "#0000FF";
     // timesRun++;
-    const points = Array.from(toVector(outlinePoints))
+    const points = Array.from(toNumberList(outlinePoints))
+    for (const v of points) {
+        context.fillRect(v[0], v[1], 1, 1);
+    }
+}
+
+function renderOutlineSimple(context, outlinePoints) {
+    //THIS IS IT, MARCHING SQUARES SAMPLE :
+    context.fillStyle = "#FF0000"// : "#0000FF";
+    // timesRun++;
+    const points = Array.from(toNumberList(outlinePoints))
 
     //console.log(outlinePoints)
-    const tolerance = 20
-    let arr = douglasPeucker(points, tolerance)
-    arr.push(points[points.length - 1]);
-    //console.log(arr)
+    const tolerance = 5
+    let sV = poly_simplify(points, tolerance)
+    //arr.push(points[points.length - 1]);
+    console.log(sV)
 
-    for (let p of arr) {
+    // for (let p of arr) {
+    //     //context.fillRect(outlinePoints[i], outlinePoints[i + 1], 1, 1);
+    //     context.fillRect(p.x, p.y, 1, 1);
+    // }
+    let ctx = context
+    ctx.beginPath()
+    const beginPoint = sV.shift()
+    ctx.moveTo(beginPoint[0], beginPoint[1])
+    for (const v of sV) {
         //context.fillRect(outlinePoints[i], outlinePoints[i + 1], 1, 1);
-        context.fillRect(p.x, p.y, 1, 1);
+        //context.fillRect(v[0], v[1], 1, 1);
+        ctx.lineTo(v[0], v[1], 1, 1)
     }
+    ctx.fill();
 }
 
 init();
