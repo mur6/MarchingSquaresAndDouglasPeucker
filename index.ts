@@ -1,5 +1,5 @@
 import { getBlobOutlinePoints as getBlobOutlinePointsOpt } from './marching-sq'
-import { douglasPeucker, type Vector } from './sim'
+import { douglasPeucker, poly_simplify, type Vector } from './sim'
 
 function getRandomItemFromArray(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -139,6 +139,13 @@ function* toVector(outlinePoints) {
     }
 }
 
+function* toNumberList(outlinePoints) {
+    for (var i = 0; i < outlinePoints.length; i += 2) {
+        //const p: Vector = { x: outlinePoints[i], y: outlinePoints[i + 1] }
+        yield [outlinePoints[i], outlinePoints[i + 1]]
+    }
+}
+
 function renderOutline(context, outlinePoints) {
     //THIS IS IT, MARCHING SQUARES SAMPLE :
     context.fillStyle = "#FF0000"// : "#0000FF";
@@ -146,7 +153,7 @@ function renderOutline(context, outlinePoints) {
     const points = Array.from(toVector(outlinePoints))
 
     //console.log(outlinePoints)
-    const tolerance = 0.9
+    const tolerance = 20
     let arr = douglasPeucker(points, tolerance)
     arr.push(points[points.length - 1]);
     //console.log(arr)
