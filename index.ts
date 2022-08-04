@@ -1,5 +1,5 @@
 import { getBlobOutlinePoints as getBlobOutlinePointsOpt } from './marching-sq'
-import { douglasPeucker, poly_simplify, type Vector } from './sim'
+import { douglasPeucker, poly_simplify, type Vector } from './douglas-peucker'
 
 // function getRandomItemFromArray(array) {
 //     return array[Math.floor(Math.random() * array.length)];
